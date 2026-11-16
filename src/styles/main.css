@@ -1,0 +1,169 @@
+/* Palet warna diambil dari dashboard internal (e-kepengusahaan-dev): navy Kemenhub, tema terang.
+   Tipografi, radius, dan layout tetap dari design.md. */
+@import "maplibre-gl/dist/maplibre-gl.css" layer(base);
+@import "tailwindcss";
+
+/* design.md ikut terpindai karena ada di root; abaikan supaya class tidak ikut ter-generate. */
+@source not "../../design.md";
+
+@theme {
+  /* Hanya warna dari dashboard yang tersedia: warna bawaan Tailwind dimatikan. */
+  --color-*: initial;
+
+  /* Permukaan & teks */
+  --color-background: #f3f5f9;
+  --color-foreground: #17213a;
+  --color-card: #ffffff;
+  --color-muted: #eef1f7;
+  --color-muted-foreground: #5b6783;
+  --color-accent: #e8edf7;
+  --color-border: #e1e6f0;
+  --color-input: #cbd3e3;
+
+  /* Brand */
+  --color-primary: #12306b;
+  --color-primary-foreground: #ffffff;
+  --color-ring: #2f66c4;
+  --color-sky: #9db8ea; /* sidebar-ring dashboard: aksen terang di atas navy */
+
+  /* Status (titik & badge) */
+  --color-ok: #1f9d6b;
+  --color-ok-fg: #17724f;
+  --color-ok-bg: #e4f5ee;
+  --color-info: #2f66c4;
+  --color-info-fg: #24559f;
+  --color-info-bg: #e8f0fc;
+  --color-warn: #d9852b;
+  --color-warn-fg: #8f5310;
+  --color-warn-bg: #fbf0e2;
+  --color-danger: #cf4257;
+  --color-danger-fg: #b0283e;
+  --color-danger-bg: #fbe7ea;
+  --color-grey: #8a95ac;
+  --color-grey-fg: #55617c;
+  --color-grey-bg: #eef1f7;
+
+  --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --text-caption: 11px;       --text-caption--line-height: 1.4;
+  --text-body: 15px;          --text-body--line-height: 1.5;
+  --text-subheading: 18px;    --text-subheading--line-height: 1.4;    --text-subheading--letter-spacing: -0.009em;
+  --text-heading-sm: 24px;    --text-heading-sm--line-height: 1.3;    --text-heading-sm--letter-spacing: -0.013em;
+  --text-heading: 36px;       --text-heading--line-height: 1.2;       --text-heading--letter-spacing: -0.018em;
+  --text-heading-lg: 45px;    --text-heading-lg--line-height: 1.18;   --text-heading-lg--letter-spacing: -0.026em;
+  --text-display: 56px;       --text-display--line-height: 1;         --text-display--letter-spacing: -0.026em;
+  --text-display-lg: 60px;    --text-display-lg--line-height: 0.94;   --text-display-lg--letter-spacing: -0.028em;
+
+  --radius-small: 3px;
+  --radius-medium: 12px;
+  --radius-button: 18px;
+  --radius-card: 24px;
+  --radius-pill: 999px;
+}
+
+@layer base {
+  html { color-scheme: light; scroll-behavior: smooth; scroll-padding-top: 80px; }
+  /* Footer selalu di dasar layar walau isi halaman pendek. */
+  body { @apply flex min-h-svh flex-col bg-background font-sans text-body font-medium text-foreground antialiased; }
+  body > main { @apply flex-1; }
+  ::selection { @apply bg-primary text-primary-foreground; }
+  :focus-visible { @apply outline-2 outline-offset-2 outline-ring; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+}
+
+@layer components {
+  /* Layout: max 1200px. */
+  .wrap { @apply mx-auto w-full max-w-[1200px] px-4 sm:px-6; }
+  /* Halaman menu: beri ruang untuk navbar mengambang. */
+  .page { @apply pt-24 pb-16 sm:pt-28; }
+
+  /* Kepala halaman: judul dua warna di kiri, tanggal data + CTA di kanan. */
+  .page-head { @apply mb-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between; }
+  .page-title { @apply text-heading-sm font-semibold text-primary sm:text-heading; }
+  .page-title .sub { @apply block text-subheading font-semibold text-muted-foreground/70 sm:text-heading-sm; }
+  .date-chip { @apply inline-flex h-10 items-center gap-2 rounded-pill border border-border bg-card pr-4 pl-1.5 text-sm; }
+  .date-chip b { @apply grid size-7 place-items-center rounded-full bg-accent text-xs font-semibold text-primary; }
+  .cta-pill { @apply inline-flex h-10 items-center gap-2 rounded-pill bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90; }
+
+  /* Katalog kartu untuk masyarakat */
+  .item-grid { @apply grid gap-4 sm:grid-cols-2 lg:grid-cols-3; }
+  .item-card { @apply relative flex flex-col rounded-[24px] border border-border bg-card p-5 transition-colors has-[.item-link]:cursor-pointer hover:border-primary/40 has-[.item-link:focus-visible]:outline-2 has-[.item-link:focus-visible]:outline-offset-2 has-[.item-link:focus-visible]:outline-ring; }
+  /* Link judul yang melebar ke seluruh kartu. */
+  .item-link { @apply outline-none after:absolute after:inset-0 after:rounded-[24px] after:content-[""]; }
+  .item-card:hover .item-link { @apply text-primary; }
+  .icon-badge { @apply grid size-11 shrink-0 place-items-center rounded-2xl bg-accent text-primary; }
+  .chip { @apply inline-flex items-center rounded-pill px-2.5 py-1 text-xs font-semibold whitespace-nowrap; }
+  .item-kicker { @apply mt-4 text-xs font-semibold tracking-wide text-muted-foreground uppercase; }
+  .item-title { @apply mt-1 text-subheading font-semibold text-foreground; }
+  .item-meta { @apply mt-2 flex items-start gap-1.5 text-sm text-muted-foreground; }
+  .item-meta svg { @apply mt-0.5 shrink-0; }
+  .facts { @apply mt-4 grid grid-cols-2 gap-3 rounded-2xl bg-muted/60 p-3; }
+  .facts dt { @apply text-xs text-muted-foreground; }
+  .facts dd { @apply mt-0.5 text-sm font-semibold tabular-nums; }
+  /* Kaki kartu selalu menempel di bawah supaya tombol sejajar antarkartu. */
+  .item-foot { @apply relative z-1 mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-5; }
+  .item-action { @apply inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline hover:underline-offset-4; }
+
+  /* Halaman detail */
+  .crumbs { @apply mb-5 flex flex-wrap items-center gap-2 text-sm text-muted-foreground; }
+  .crumbs a { @apply hover:text-primary hover:underline; }
+  .crumbs [aria-current] { @apply max-w-[40ch] truncate font-semibold text-foreground; }
+  .detail-list { @apply mt-6 grid gap-x-6 gap-y-4 border-t border-border pt-5 sm:grid-cols-2; }
+  .detail-list dt { @apply text-xs text-muted-foreground; }
+  .detail-list dd { @apply mt-0.5 font-semibold; }
+
+  /* Popup peta beranda: daftar item terkait yang menaut ke halaman detail */
+  .popup-link { @apply text-primary underline-offset-2 hover:underline; }
+  .popup-cta { @apply mt-4 flex justify-center rounded-pill bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90; }
+  /* Popup di atas efek pudar peta (z-1) & daftar lokasi. */
+  .maplibregl-popup { @apply z-3; }
+  .maplibregl-popup-close-button { @apply px-2 text-base text-muted-foreground; }
+
+  /* Pasangan dua kolom: teks kiri, kartu kanan. */
+  .pair { @apply grid items-start gap-8 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-12; }
+  .pair-text { @apply text-subheading text-muted-foreground; }
+
+  /* Link navbar: 15px / 600. */
+  .nav-link { @apply inline-flex items-center rounded-pill px-2.5 py-[9px] leading-none whitespace-nowrap transition-colors hover:text-primary max-lg:py-3; }
+  .nav-link[aria-current="page"] { @apply text-primary underline decoration-1 underline-offset-[6px]; }
+
+  /* Tombol: radius 18px, padding 9px 12px, 14px / 600. */
+  .btn { @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-button border px-3 py-[9px] text-sm leading-none font-semibold whitespace-nowrap transition-colors; }
+  .btn-primary { @apply border-primary bg-primary text-primary-foreground hover:bg-primary/90; }
+  .btn-outline { @apply border-input bg-card text-foreground hover:bg-muted; }
+  .btn-ghost { @apply border-transparent bg-transparent text-foreground hover:bg-muted; }
+
+  /* Kartu: radius 24px, border 1px, tanpa bayangan. */
+  .card { @apply rounded-card border border-border bg-card; }
+
+
+  .form-control { @apply w-full rounded-medium border border-input bg-card px-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none; }
+  /* Select: panah bawaan diganti chevron sendiri dengan jarak yang pas dari tepi. */
+  select.form-control {
+    @apply cursor-pointer appearance-none bg-no-repeat pr-10;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235b6783' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-position: right 14px center;
+    background-size: 16px;
+  }
+  .invalid .form-control { @apply border-danger; }
+  .err { @apply hidden text-xs text-danger-fg; }
+  .invalid .err { @apply block; }
+
+
+  /* Peta (MapLibre). CSS bawaan MapLibre ada di layer base, jadi aturan ini menang. */
+  .map-marker { @apply size-3.5 cursor-pointer rounded-full border-2 border-card bg-info p-0; }
+  /* Jangan pakai scale: MapLibre memosisikan marker lewat transform, scale ikut mengalikan posisinya. */
+  .map-marker.active { @apply size-[18px] bg-primary outline-2 outline-offset-2 outline-info/40; }
+  .maplibregl-map { @apply font-sans; }
+  .maplibregl-popup-content { @apply rounded-medium border border-border bg-card px-3 py-2.5 text-[13px] leading-normal text-foreground shadow-none; }
+  .maplibregl-popup-tip { @apply hidden; }
+  /* Pesan "gunakan ⌘/Ctrl + scroll": tetap di dalam area peta, di bawah KPI & daftar lokasi
+     (bawaan MapLibre z-index 99999 sehingga menimpa elemen lain), tampil sebagai pil. */
+  .maplibregl-cooperative-gesture-screen { @apply z-1! items-end! bg-primary/25! pb-16 text-base!; }
+  .maplibregl-desktop-message, .maplibregl-mobile-message { @apply rounded-pill bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground; }
+  .maplibregl-ctrl-group { @apply overflow-hidden rounded-medium! border border-border bg-card! shadow-none!; }
+  .maplibregl-ctrl-group button + button { @apply border-border!; }
+  .maplibregl-ctrl-attrib { @apply bg-card/80! text-muted-foreground; }
+  .maplibregl-ctrl-attrib a { @apply text-muted-foreground!; }
+}
+

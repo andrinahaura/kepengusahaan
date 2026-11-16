@@ -1,0 +1,23 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<!-- Pra-muat halaman saat link di-hover (Chrome/Edge) supaya pindah menu terasa instan. -->
+<script type="speculationrules">
+{ "prerender": [{ "where": { "and": [{ "href_matches": "/*" }, { "not": { "selector_matches": "[target=_blank], [download]" } }] }, "eagerness": "moderate" }] }
+</script>
+<!-- Transisi halus antarhalaman (View Transitions lintas dokumen; Chrome/Edge 126+, Safari 18.2+).
+     Ditaruh inline di <head> karena opt-in harus sudah ada saat halaman baru mulai dirender
+     (di mode dev, CSS utama baru disuntik lewat JS). Navbar tetap diam; isi memudar dan naik sedikit. -->
+<style>
+  @view-transition { navigation: auto; }
+  #nav { view-transition-name: site-nav; }
+  ::view-transition-old(root) { animation: 160ms ease-in both vt-out; }
+  ::view-transition-new(root) { animation: 280ms cubic-bezier(.2, .7, .2, 1) both vt-in; }
+  ::view-transition-group(site-nav) { animation-duration: 0s; }
+  @keyframes vt-out { to { opacity: 0; } }
+  @keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+  }
+</style>

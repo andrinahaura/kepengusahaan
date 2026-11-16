@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="id">
+<head>
+<!-- @include head.html -->
+<title>Klinik Hub — Data Kepengusahaan Aset Terminal</title>
+<meta name="description" content="Kirim pertanyaan, konsultasi, atau pengaduan terkait kepengusahaan aset terminal.">
+<script type="module" src="/src/pages/klinik.js"></script>
+</head>
+<body>
+
+<!-- @include header.html -->
+
+<main class="page">
+  <div class="wrap">
+    <div class="page-head">
+      <h1 class="page-title">Klinik Hub.<span class="sub">Pertanyaan, konsultasi & pengaduan</span></h1>
+    </div>
+    <div class="pair">
+      <div>
+        <p class="pair-text">
+          Kirim pertanyaan, permintaan informasi, konsultasi, atau pengaduan terkait kepengusahaan aset terminal.
+          Petugas membalas ke alamat email yang Anda cantumkan.
+        </p>
+        <p class="mt-4 text-sm text-muted-foreground">Simpan nomor tiket yang muncul setelah pengiriman untuk menanyakan perkembangannya.</p>
+      </div>
+
+      <form id="ticketForm" class="card p-6" novalidate>
+        <div id="formFields" class="grid gap-5 sm:grid-cols-2">
+          <div class="field flex flex-col gap-1.5 sm:col-span-2">
+            <label for="fKategori" class="text-[13px] font-semibold text-foreground">Kategori</label>
+            <select id="fKategori" name="kategori" class="form-control h-9">
+              <option>Pertanyaan</option><option>Permintaan informasi</option><option>Konsultasi</option><option>Pengaduan</option>
+            </select>
+          </div>
+          <div class="field flex flex-col gap-1.5">
+            <label for="fNama" class="text-[13px] font-semibold text-foreground">Nama</label>
+            <input id="fNama" name="nama" class="form-control h-9" autocomplete="name" required>
+            <span class="err">Nama wajib diisi.</span>
+          </div>
+          <div class="field flex flex-col gap-1.5">
+            <label for="fEmail" class="text-[13px] font-semibold text-foreground">Email</label>
+            <input id="fEmail" name="email" type="email" class="form-control h-9" autocomplete="email" required>
+            <span class="err">Masukkan email yang valid.</span>
+          </div>
+          <div class="field flex flex-col gap-1.5 sm:col-span-2">
+            <label for="fInstansi" class="text-[13px] font-semibold text-foreground">Instansi atau perusahaan <span class="font-medium text-muted-foreground">(opsional)</span></label>
+            <input id="fInstansi" name="instansi" class="form-control h-9" autocomplete="organization">
+          </div>
+          <div class="field flex flex-col gap-1.5 sm:col-span-2">
+            <label for="fSubjek" class="text-[13px] font-semibold text-foreground">Subjek</label>
+            <input id="fSubjek" name="subjek" class="form-control h-9" required>
+            <span class="err">Subjek wajib diisi.</span>
+          </div>
+          <div class="field flex flex-col gap-1.5 sm:col-span-2">
+            <label for="fPesan" class="text-[13px] font-semibold text-foreground">Pesan</label>
+            <textarea id="fPesan" name="pesan" rows="5" class="form-control resize-y py-2" required></textarea>
+            <span class="err">Pesan minimal 10 karakter.</span>
+          </div>
+          <div class="field flex flex-col gap-1.5 sm:col-span-2">
+            <label for="fFile" class="text-[13px] font-semibold text-foreground">Lampiran <span class="font-medium text-muted-foreground">(opsional · PDF, JPG, PNG · maks. 5 MB)</span></label>
+            <input id="fFile" name="lampiran" type="file" accept=".pdf,.jpg,.jpeg,.png" class="text-[13px] text-muted-foreground file:mr-3 file:cursor-pointer file:rounded-pill file:border file:border-input file:bg-card file:px-3 file:py-1.5 file:text-[13px] file:font-semibold file:text-foreground hover:file:bg-muted">
+            <span class="err">Ukuran lampiran maksimal 5 MB.</span>
+          </div>
+          <div class="flex justify-end sm:col-span-2">
+            <button type="submit" class="btn btn-primary">Kirim tiket</button>
+          </div>
+        </div>
+        <div id="formSuccess" class="hidden" role="status" aria-live="polite">
+          <p class="flex items-center gap-2 font-semibold"><span class="size-2 rounded-full bg-ok" aria-hidden="true"></span>Tiket terkirim.</p>
+          <p class="mt-4 text-sm text-muted-foreground">Nomor tiket Anda:</p>
+          <p id="ticketNo" class="mt-1 text-heading-sm font-semibold tabular-nums"></p>
+          <p class="mt-4 text-sm text-muted-foreground">Balasan akan dikirim ke email Anda.</p>
+          <button type="button" id="newTicket" class="btn btn-outline mt-6">Kirim tiket lain</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<!-- @include footer.html -->
+</body>
+</html>
