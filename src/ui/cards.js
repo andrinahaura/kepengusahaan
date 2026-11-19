@@ -30,7 +30,7 @@ export const meta = (ic, text) => `<p class="item-meta">${icon(ic, 15)}<span>${e
 
 /** Link aksi di kaki kartu. */
 export const action = (href, label, { external = false } = {}) =>
-  `<a class="item-action" href="${esc(href)}" ${external ? 'target="_blank" rel="noopener"' : ""}>${esc(label)} ${icon("arrow", 15)}</a>`;
+  `<a class="item-action" href="${esc(href)}" ${external ? 'target="_blank" rel="noopener"' : ""}>${esc(label)} <span class="action-icon">${icon("arrow", 15)}</span></a>`;
 
 /** Isi daftar kartu, atau pesan kosong. */
 export function renderCards(el, rows, cardHtml, empty = "Tidak ada data yang cocok dengan filter.") {
@@ -40,5 +40,5 @@ export function renderCards(el, rows, cardHtml, empty = "Tidak ada data yang coc
 }
 
 /** Link ke form Klinik Hub dengan subjek terisi. */
-export const tanya = (subjek, kategori = "Permintaan informasi") =>
+export const tanya = (subjek, kategori = "Permintaan Informasi") =>
   `/klinik/?${new URLSearchParams({ kategori, subjek })}`;

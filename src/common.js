@@ -4,6 +4,7 @@ import "./styles/main.css";
 import { loadPublicData } from "./data/api.js";
 import { fmtDate } from "./lib/format.js";
 import { initNav } from "./features/nav.js";
+import { hydrateMapThumbs } from "./ui/map-thumbs.js";
 
 /**
  * Inisialisasi yang sama untuk semua halaman (font, CSS, navbar, footer),
@@ -23,6 +24,8 @@ export function bootPage(render) {
         date.dateTime = d.updatedAt;
       }
       render(d);
+      // Gambar peta di kartu dibuat setelah kartu tampil.
+      hydrateMapThumbs();
     })
     .catch((err) => console.error("Gagal memuat data publik:", err));
 }

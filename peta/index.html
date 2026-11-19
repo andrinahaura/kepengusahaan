@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="id">
+<head>
+<!-- @include head.html -->
+<title>Peta Terminal — Data Kepengusahaan Aset Terminal</title>
+<meta name="description" content="Peta lokasi terminal beserta daftar kios, dikelompokkan per wilayah.">
+<script type="module" src="/src/pages/peta.js"></script>
+</head>
+<body>
+
+<!-- @include header.html -->
+
+<!-- Peta penuh satu layar. Di layar lebar, kartu daftar terminal per wilayah menumpang di sisi kiri peta;
+     di layar kecil kartu berada di bawah peta. (src/features/peta-halaman.js) -->
+<main class="relative">
+  <h1 class="sr-only">Peta terminal</h1>
+  <div id="petaMap" class="h-[70svh] min-h-[420px] w-full bg-muted lg:h-svh lg:min-h-[600px]" role="region" aria-label="Peta lokasi terminal"></div>
+
+  <aside class="wilayah-card" aria-labelledby="wilayahTitle">
+    <div class="wilayah-head">
+      <div class="min-w-0">
+        <h2 id="wilayahTitle" class="text-subheading font-bold text-foreground">Terminal per wilayah</h2>
+        <p id="wilayahMeta" class="mt-0.5 text-xs text-muted-foreground"></p>
+      </div>
+      <button id="petaReset" type="button" class="wilayah-reset">Lihat semua</button>
+    </div>
+    <div id="wilayahList" class="wilayah-list"></div>
+  </aside>
+</main>
+
+<!-- @include footer.html -->
+</body>
+</html>

@@ -21,7 +21,17 @@
           Kirim pertanyaan, permintaan informasi, konsultasi, atau pengaduan terkait kepengusahaan aset terminal.
           Petugas membalas ke alamat email yang Anda cantumkan.
         </p>
-        <p class="mt-4 text-sm text-muted-foreground">Simpan nomor tiket yang muncul setelah pengiriman untuk menanyakan perkembangannya.</p>
+        <h2 class="mt-8 text-sm font-bold text-primary">Bagaimana pertanyaan diproses</h2>
+        <ol class="mt-3 grid gap-3 text-sm">
+          <li class="flex gap-3"><span class="grid size-6 shrink-0 place-items-center rounded-full bg-accent text-xs font-bold text-primary">1</span>Pertanyaan masuk sebagai tiket di Klinik Hub dan mendapat nomor tiket.</li>
+          <li class="flex gap-3"><span class="grid size-6 shrink-0 place-items-center rounded-full bg-accent text-xs font-bold text-primary">2</span>Petugas Direktorat Jenderal Perhubungan Darat menangani tiket sesuai kategorinya.</li>
+          <li class="flex gap-3"><span class="grid size-6 shrink-0 place-items-center rounded-full bg-accent text-xs font-bold text-primary">3</span>Balasan dikirim ke email yang Anda isi.</li>
+        </ol>
+        <div class="mt-8 rounded-2xl border border-border bg-card p-4 text-sm">
+          <p class="font-semibold">Sudah punya akun?</p>
+          <p class="mt-1 text-muted-foreground">Masuk ke dashboard untuk melihat riwayat dan utas tiket Anda.</p>
+          <a class="item-action mt-3" href="https://e-kepengusahaan-dev.citakelolakreasi.id/login">Masuk ke dashboard</a>
+        </div>
       </div>
 
       <form id="ticketForm" class="card p-6" novalidate>
@@ -29,7 +39,7 @@
           <div class="field flex flex-col gap-1.5 sm:col-span-2">
             <label for="fKategori" class="text-[13px] font-semibold text-foreground">Kategori</label>
             <select id="fKategori" name="kategori" class="form-control h-9">
-              <option>Pertanyaan</option><option>Permintaan informasi</option><option>Konsultasi</option><option>Pengaduan</option>
+              <option>Pertanyaan/Inquiry</option><option>Permintaan Informasi</option><option>Konsultasi</option><option>Pengaduan</option>
             </select>
           </div>
           <div class="field flex flex-col gap-1.5">
@@ -39,7 +49,8 @@
           </div>
           <div class="field flex flex-col gap-1.5">
             <label for="fEmail" class="text-[13px] font-semibold text-foreground">Email</label>
-            <input id="fEmail" name="email" type="email" class="form-control h-9" autocomplete="email" required>
+            <input id="fEmail" name="email" type="email" class="form-control h-9" autocomplete="email" aria-describedby="emailHint" required>
+            <span id="emailHint" class="text-xs text-muted-foreground">Balasan dikirim ke alamat ini.</span>
             <span class="err">Masukkan email yang valid.</span>
           </div>
           <div class="field flex flex-col gap-1.5 sm:col-span-2">
@@ -52,9 +63,12 @@
             <span class="err">Subjek wajib diisi.</span>
           </div>
           <div class="field flex flex-col gap-1.5 sm:col-span-2">
-            <label for="fPesan" class="text-[13px] font-semibold text-foreground">Pesan</label>
-            <textarea id="fPesan" name="pesan" rows="5" class="form-control resize-y py-2" required></textarea>
-            <span class="err">Pesan minimal 10 karakter.</span>
+            <div class="flex items-baseline justify-between gap-3">
+              <label for="fPesan" class="text-[13px] font-semibold text-foreground">Pertanyaan</label>
+              <span id="pesanCount" class="text-xs text-muted-foreground tabular-nums" aria-live="polite">0/5000</span>
+            </div>
+            <textarea id="fPesan" name="pesan" rows="5" maxlength="5000" class="form-control resize-y py-2" required></textarea>
+            <span class="err">Pertanyaan minimal 10 karakter.</span>
           </div>
           <div class="field flex flex-col gap-1.5 sm:col-span-2">
             <label for="fFile" class="text-[13px] font-semibold text-foreground">Lampiran <span class="font-medium text-muted-foreground">(opsional · PDF, JPG, PNG · maks. 5 MB)</span></label>

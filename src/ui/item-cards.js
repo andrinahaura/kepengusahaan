@@ -1,7 +1,7 @@
 import { detailUrl, KPBU_TAHAP } from "../data/api.js";
 import { esc, nf, rupiah } from "../lib/format.js";
 import { action, chip, facts, meta, tanya } from "./cards.js";
-import { icon } from "./icons.js";
+import { media } from "./media.js";
 
 /* Kartu katalog per jenis data. Dipakai di halaman menu dan di bagian "terkait" halaman detail.
    Seluruh kartu menaut ke halaman detail. */
@@ -15,16 +15,13 @@ export const SEWA_TONE = { Tersedia: "info", Tersewa: "ok" };
 
 export const asetCard = (r) => `
   <article class="item-card">
-    <div class="flex items-start justify-between gap-3">
-      <span class="icon-badge">${icon("building")}</span>
-      ${chip(r.status, r.status === "Operasional" ? "ok" : "grey")}
-    </div>
+    ${media({ foto: r.foto, coord: r.coord, alt: r.nama, fallbackIcon: "building" }, chip(r.status, r.status === "Operasional" ? "ok" : "grey"))}
     <p class="item-kicker">${esc(r.tipe)}</p>
     ${title("aset", r.id, r.nama)}
-    ${meta("pin", r.bptd)}
+    ${meta("pin", `${r.bptd} · ${r.provinsi}`)}
     ${facts([
       ["Luas lahan", `${nf.format(r.luas)} m²`],
-      ["Kondisi", r.kondisi],
+      ["Luas bangunan", r.luasBangunan != null ? `${nf.format(r.luasBangunan)} m²` : null],
     ])}
     <div class="item-foot">
       ${r.lat != null ? action(`https://www.google.com/maps?q=${r.lat},${r.lng}`, "Buka di peta", { external: true }) : ""}
@@ -34,13 +31,10 @@ export const asetCard = (r) => `
 
 export const objekCard = (r) => `
   <article class="item-card">
-    <div class="flex items-start justify-between gap-3">
-      <span class="icon-badge">${icon("tag")}</span>
-      ${chip(r.skema, "primary")}
-    </div>
+    ${media({ foto: r.foto, coord: r.coord, alt: r.nama, fallbackIcon: "tag" }, chip(r.skema, "primary"))}
     <p class="item-kicker">${esc(r.klasifikasi)}</p>
     ${title("objek", r.id, r.nama)}
-    ${meta("pin", `${r.lokasi} · ${r.bptd}`)}
+    ${meta("pin", `${r.lokasi} · ${r.aset}, ${r.provinsi}`)}
     ${facts([
       ["Luas", `${nf.format(r.luas)} m²`],
       ["Kondisi", r.kondisi],
@@ -51,22 +45,16 @@ export const objekCard = (r) => `
 
 export const sewaCard = (r) => `
   <article class="item-card">
-    <div class="flex items-start justify-between gap-3">
-      <span class="icon-badge">${icon("wallet")}</span>
-      ${chip(r.status, SEWA_TONE[r.status] || "grey")}
-    </div>
+    ${media({ foto: r.foto, coord: r.coord, alt: r.objek, fallbackIcon: "wallet" }, chip(r.status, SEWA_TONE[r.status] || "grey"))}
     ${title("sewa", r.id, r.objek, "mt-4")}
     <p class="mt-3 text-heading-sm font-semibold text-primary tabular-nums">${rupiah(r.nilai)}</p>
-    <p class="text-sm text-muted-foreground">untuk jangka waktu ${esc(r.jangkaWaktu)}</p>
+    <p class="text-sm text-muted-foreground">Tarif ${esc((r.periode || "").toLowerCase())} · jangka waktu ${esc(r.jangkaWaktu)}</p>
     <div class="item-foot">${action(tanya(`Minat sewa ${r.objek}`), r.status === "Tersedia" ? "Ajukan minat sewa" : "Tanya objek ini")}</div>
   </article>`;
 
 export const kspCard = (r) => `
   <article class="item-card">
-    <div class="flex items-start justify-between gap-3">
-      <span class="icon-badge">${icon("layers")}</span>
-      ${chip(r.skema, "primary")}
-    </div>
+    ${media({ foto: r.foto, coord: r.coord, alt: r.nama, fallbackIcon: "layers" }, chip(r.skema, "primary"))}
     ${title("ksp", r.id, r.nama, "mt-4")}
     ${meta("building", r.aset)}
     ${facts([
@@ -90,14 +78,14 @@ export const tahapBar = (tahap) => {
 
 export const kpbuCard = (r) => `
   <article class="item-card">
-    <div class="flex items-start justify-between gap-3">
-      <span class="icon-badge">${icon("flag")}</span>
-      ${chip(r.aktif ? "Aktif" : "Tidak aktif", r.aktif ? "ok" : "grey")}
-    </div>
+    ${media({ foto: r.foto, coord: r.coord, alt: r.nama, fallbackIcon: "flag" }, chip(r.aktif ? "Aktif" : "Tidak aktif", r.aktif ? "ok" : "grey"))}
     <p class="item-kicker">${esc(r.id)} · ${esc(r.skema)}</p>
     ${title("kpbu", r.id, r.nama)}
     ${meta("building", r.aset)}
     ${tahapBar(r.tahap)}
-    ${facts([["Nilai investasi", rupiah(r.investasi)]])}
+    ${facts([
+      ["Nilai investasi", rupiah(r.investasi)],
+      ["Masa konsesi", r.masaKonsesi],
+    ])}
     <div class="item-foot">${action(tanya(`Proyek KPBU ${r.id} ${r.nama}`), "Tanya proyek ini")}</div>
   </article>`;

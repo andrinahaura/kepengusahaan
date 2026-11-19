@@ -91,6 +91,8 @@
   /* Link judul yang melebar ke seluruh kartu. */
   .item-link { @apply outline-none after:absolute after:inset-0 after:rounded-[24px] after:content-[""]; }
   .item-card:hover .item-link { @apply text-primary; }
+  /* Gambar pratinjau kartu: foto aset, atau potongan peta lokasinya (src/ui/media.js). */
+  .item-media { @apply relative h-40 overflow-hidden rounded-2xl bg-muted; }
   .icon-badge { @apply grid size-11 shrink-0 place-items-center rounded-2xl bg-accent text-primary; }
   .chip { @apply inline-flex items-center rounded-pill px-2.5 py-1 text-xs font-semibold whitespace-nowrap; }
   .item-kicker { @apply mt-4 text-xs font-semibold tracking-wide text-muted-foreground uppercase; }
@@ -101,8 +103,47 @@
   .facts dt { @apply text-xs text-muted-foreground; }
   .facts dd { @apply mt-0.5 text-sm font-semibold tabular-nums; }
   /* Kaki kartu selalu menempel di bawah supaya tombol sejajar antarkartu. */
-  .item-foot { @apply relative z-1 mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-5; }
+  .item-foot { @apply relative z-1 mt-auto flex flex-wrap items-center gap-2 pt-5; }
   .item-action { @apply inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline hover:underline-offset-4; }
+  .action-icon { @apply inline-flex transition-transform; }
+  /* Aksi di kaki kartu: pil abu dengan ikon panah dalam lingkaran navy; saat hover pil jadi navy. */
+  .item-foot .item-action { @apply h-9 gap-2.5 rounded-pill bg-muted py-1 pr-1 pl-4 transition-colors hover:bg-primary hover:text-primary-foreground hover:no-underline; }
+  .item-foot .action-icon { @apply grid size-7 place-items-center rounded-full bg-primary text-primary-foreground; }
+  .item-foot .item-action:hover .action-icon { @apply translate-x-0.5 bg-card text-primary; }
+
+
+  /* Section beranda di bawah peta: dipisah jarak lega + latar selang-seling, tanpa garis. */
+  .sec { @apply py-20 sm:py-24; }
+  .sec-white { @apply bg-card; }
+  .sec-soft { @apply bg-background; }
+  .sec-head { @apply mb-10 flex flex-wrap items-end justify-between gap-x-6 gap-y-3; }
+  .sec-title { @apply text-heading-sm font-semibold text-primary sm:text-heading; }
+  .sec-sub { @apply mt-2 max-w-2xl text-subheading text-muted-foreground; }
+
+  /* Kartu (Soft UI): putih bersudut besar + bayangan halus di latar abu; di latar putih jadi abu lembut tanpa bayangan. */
+  .tile { @apply relative flex flex-col rounded-[28px] border border-border/60 bg-card p-6 shadow-[0_1px_2px_rgb(18_48_107/0.04),0_16px_36px_-20px_rgb(18_48_107/0.2)] sm:p-7; }
+  .sec-white .tile { @apply border-transparent bg-background shadow-none; }
+  .sec-white .tile .tile-row { @apply bg-card hover:bg-accent; }
+  .sec-white .tile .tile-go, .sec-white .tile .tile-chip { @apply bg-card; }
+  .tile-navy { @apply flex flex-col gap-8 rounded-[28px] bg-primary p-8 text-primary-foreground sm:p-10 md:flex-row md:items-end md:justify-between; }
+  .tile-head { @apply flex items-center justify-between gap-3; }
+  .tile-label { @apply inline-flex items-center gap-3 text-sm font-semibold text-foreground; }
+  .tile-icon { @apply grid size-10 shrink-0 place-items-center rounded-[14px] bg-accent text-primary; }
+  .tile-go { @apply grid size-9 shrink-0 place-items-center rounded-full bg-muted text-primary transition-colors hover:bg-primary hover:text-primary-foreground; }
+  .tile-kicker { @apply mt-8 text-xs font-semibold text-muted-foreground; }
+  .tile-value { @apply mt-8 text-heading-sm font-semibold text-foreground tabular-nums; }
+  .tile-kicker + .tile-value { @apply mt-1; }
+  .tile-unit { @apply ml-1.5 text-sm font-semibold text-muted-foreground; }
+  .tile-note { @apply text-sm text-muted-foreground; }
+  .tile-chip { @apply inline-flex items-center gap-1.5 rounded-pill bg-muted px-2.5 py-1 text-xs font-semibold whitespace-nowrap text-muted-foreground; }
+  .tile-chip b { @apply text-primary; }
+  .tile-row { @apply flex items-center gap-3 rounded-[16px] bg-muted/60 px-3.5 py-3 transition-colors hover:bg-accent; }
+  .tile-ghost { @apply inline-flex h-10 items-center rounded-pill bg-muted px-5 text-sm font-semibold text-primary transition-colors hover:bg-accent; }
+  .guide-step { @apply flex items-center gap-4 rounded-[20px] bg-background px-5 py-4; }
+  .guide-num { @apply grid size-9 shrink-0 place-items-center rounded-full bg-card text-sm font-bold text-primary tabular-nums; }
+  /* Miniatur kartu kios di peta (data asli), di atas latar abu lembut. */
+  .guide-demo { @apply flex flex-col items-center justify-center rounded-[22px] bg-muted px-5 py-8; }
+  .guide-card { @apply w-full max-w-[260px] rounded-[18px] bg-card p-4 shadow-[0_14px_30px_-12px_rgb(18_48_107/0.25),0_2px_6px_-2px_rgb(18_48_107/0.08)]; }
 
   /* Halaman detail */
   .crumbs { @apply mb-5 flex flex-wrap items-center gap-2 text-sm text-muted-foreground; }
@@ -112,12 +153,42 @@
   .detail-list dt { @apply text-xs text-muted-foreground; }
   .detail-list dd { @apply mt-0.5 font-semibold; }
 
-  /* Popup peta beranda: daftar item terkait yang menaut ke halaman detail */
-  .popup-link { @apply text-primary underline-offset-2 hover:underline; }
-  .popup-cta { @apply mt-4 flex justify-center rounded-pill bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90; }
+  /* Kartu mengambang di pin peta beranda (Soft UI: sudut bulat, bayangan halus, lega). */
+  .pin-pop .maplibregl-popup-content { @apply w-[300px] max-w-[calc(100vw-48px)] rounded-[22px] border-border/70 p-0 text-sm shadow-[0_18px_40px_-12px_rgb(18_48_107/0.28),0_3px_10px_-2px_rgb(18_48_107/0.08)]; }
+  .pin-pop .maplibregl-popup-close-button { @apply top-3 right-3 grid size-8 place-items-center rounded-full p-0 text-lg leading-none text-muted-foreground transition-colors hover:bg-muted hover:text-foreground; }
+  .pop-head { @apply px-5 pt-5 pb-4 pr-12; }
+  .pop-kicker { @apply text-xs text-muted-foreground; }
+  .pop-title { @apply mt-1 text-[15px] leading-snug font-bold text-foreground; }
+  .pop-count { @apply inline-flex items-center rounded-pill bg-accent px-2.5 py-1 font-semibold text-primary tabular-nums; }
+  .pop-drop { @apply mx-3 rounded-[16px] bg-muted/70; }
+  .pop-toggle { @apply flex w-full cursor-pointer items-center justify-between gap-3 rounded-[16px] px-4 py-3 text-left text-[13px] font-semibold text-foreground transition-colors hover:bg-muted; }
+  .pop-chevron { @apply inline-flex text-muted-foreground transition-transform duration-200; }
+  .pop-toggle[aria-expanded="true"] .pop-chevron { @apply rotate-180; }
+  .pop-list { @apply grid max-h-52 grid-cols-1 gap-1 overflow-y-auto overscroll-contain px-1.5 pb-1.5; }
+  .pop-item { @apply flex items-center justify-between gap-3 rounded-[12px] bg-card px-3 py-2.5 transition-colors hover:bg-accent; }
+  div.pop-item { @apply hover:bg-card; }
+  .pop-item-name { @apply line-clamp-2 text-[13px] font-semibold text-foreground; }
+  .pop-item-sub { @apply mt-0.5 block truncate text-xs text-muted-foreground; }
+  .pop-status { @apply inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold whitespace-nowrap text-muted-foreground; }
+  .pop-empty { @apply mx-3 rounded-[16px] bg-muted/70 px-4 py-3 text-[13px] text-muted-foreground; }
+  .pop-cta { @apply m-3 mt-3 flex items-center justify-center gap-1.5 rounded-pill bg-primary px-4 py-2.5 text-[13px] font-semibold text-primary-foreground transition-colors hover:bg-primary/90; }
   /* Popup di atas efek pudar peta (z-1) & daftar lokasi. */
   .maplibregl-popup { @apply z-3; }
   .maplibregl-popup-close-button { @apply px-2 text-base text-muted-foreground; }
+
+  /* Halaman Peta: kartu daftar terminal per wilayah (menumpang di kiri peta pada layar lebar). */
+  .wilayah-card { @apply relative z-3 mx-4 -mt-10 mb-10 flex max-h-[70svh] flex-col overflow-hidden rounded-[24px] border border-border/70 bg-card shadow-[0_18px_40px_-12px_rgb(18_48_107/0.22),0_3px_10px_-2px_rgb(18_48_107/0.06)] sm:mx-6 lg:absolute lg:top-[84px] lg:bottom-6 lg:left-6 lg:m-0 lg:max-h-none lg:w-[340px]; }
+  .wilayah-head { @apply flex items-start justify-between gap-3 border-b border-border px-5 pt-5 pb-4; }
+  .wilayah-reset { @apply inline-flex h-8 shrink-0 cursor-pointer items-center rounded-pill bg-muted px-3 text-xs font-semibold text-primary transition-colors hover:bg-accent; }
+  .wilayah-list { @apply flex-1 overflow-y-auto overscroll-contain px-2 py-2; }
+  .wilayah-group + .wilayah-group { @apply mt-1; }
+  .wilayah-sum { @apply flex cursor-pointer list-none items-center justify-between gap-3 rounded-[14px] px-3 py-2.5 text-[13px] font-bold text-foreground transition-colors select-none hover:bg-muted; }
+  .wilayah-sum::-webkit-details-marker { @apply hidden; }
+  .wilayah-chev { @apply transition-transform duration-200; }
+  .wilayah-group:not([open]) .wilayah-chev { @apply -rotate-90; }
+  .wilayah-row { @apply flex w-full cursor-pointer items-center gap-3 rounded-[14px] bg-muted/60 px-3 py-2.5 text-left transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-60; }
+  .wilayah-row[aria-current] { @apply bg-accent outline-1 outline-ring/30; }
+  .wilayah-kios { @apply shrink-0 rounded-pill bg-card px-2.5 py-1 text-xs font-semibold text-primary tabular-nums; }
 
   /* Pasangan dua kolom: teks kiri, kartu kanan. */
   .pair { @apply grid items-start gap-8 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-12; }
@@ -125,7 +196,17 @@
 
   /* Link navbar: 15px / 600. */
   .nav-link { @apply inline-flex items-center rounded-pill px-2.5 py-[9px] leading-none whitespace-nowrap transition-colors hover:text-primary max-lg:py-3; }
-  .nav-link[aria-current="page"] { @apply text-primary underline decoration-1 underline-offset-[6px]; }
+  .nav-link[aria-current="page"], .nav-link[data-active] { @apply text-primary underline decoration-1 underline-offset-[6px]; }
+
+  /* Dropdown navbar: panel putih di bawah tombol (desktop), menyatu di daftar (mobile). */
+  .nav-drop { @apply relative flex flex-col; }
+  .nav-drop.open > .nav-link { @apply bg-muted text-primary; }
+  .nav-drop > .nav-link svg { @apply transition-transform duration-200; }
+  .nav-drop.open > .nav-link svg { @apply rotate-180; }
+  .nav-drop-panel { @apply hidden flex-col p-1.5 lg:absolute lg:top-[calc(100%+14px)] lg:left-0 lg:w-60 lg:rounded-[20px] lg:border lg:border-border lg:bg-card max-lg:pl-3; }
+  .nav-drop.open .nav-drop-panel { @apply flex; }
+  .nav-drop-link { @apply rounded-medium px-3 py-2.5 text-[15px] font-medium text-foreground transition-colors hover:bg-muted hover:text-primary; }
+  .nav-drop-link[aria-current="page"] { @apply font-bold text-primary; }
 
   /* Tombol: radius 18px, padding 9px 12px, 14px / 600. */
   .btn { @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-button border px-3 py-[9px] text-sm leading-none font-semibold whitespace-nowrap transition-colors; }
@@ -154,6 +235,15 @@
   .map-marker { @apply size-3.5 cursor-pointer rounded-full border-2 border-card bg-info p-0; }
   /* Jangan pakai scale: MapLibre memosisikan marker lewat transform, scale ikut mengalikan posisinya. */
   .map-marker.active { @apply size-[18px] bg-primary outline-2 outline-offset-2 outline-info/40; }
+  /* Pin terminal: kepala bulat navy + ekor ke titik lokasi. Skala hanya pada anak, bukan elemen marker. */
+  /* Tanpa `relative`: MapLibre butuh position absolute (.maplibregl-marker) untuk menaruh pin. */
+  .map-pin { @apply flex w-10 cursor-pointer flex-col items-center border-0 bg-transparent p-0; }
+  .map-pin-head { @apply grid size-10 origin-bottom place-items-center rounded-full border-[3px] border-card bg-primary text-primary-foreground shadow-[0_6px_16px_-4px_rgb(18_48_107/0.45)] transition-[transform,background-color] duration-200; }
+  .map-pin::after { content: ""; @apply -mt-0.5 size-0 border-x-[6px] border-t-[9px] border-x-transparent border-t-primary transition-colors duration-200; }
+  .map-pin:hover .map-pin-head { @apply -translate-y-0.5; }
+  .map-pin.active .map-pin-head { @apply scale-110 bg-ring; }
+  .map-pin.active::after { @apply border-t-ring; }
+  .map-pin-badge { @apply absolute -top-1.5 -right-2 grid h-5 min-w-5 place-items-center rounded-pill bg-card px-1 text-[11px] font-bold text-primary tabular-nums shadow-[0_2px_6px_rgb(18_48_107/0.22)]; }
   .maplibregl-map { @apply font-sans; }
   .maplibregl-popup-content { @apply rounded-medium border border-border bg-card px-3 py-2.5 text-[13px] leading-normal text-foreground shadow-none; }
   .maplibregl-popup-tip { @apply hidden; }

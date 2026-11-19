@@ -8,12 +8,22 @@
       class="hidden items-center text-[15px] font-semibold lg:flex
              max-lg:group-[.open]:absolute max-lg:group-[.open]:inset-x-0 max-lg:group-[.open]:top-[calc(100%+8px)] max-lg:group-[.open]:flex max-lg:group-[.open]:flex-col max-lg:group-[.open]:items-stretch max-lg:group-[.open]:rounded-card max-lg:group-[.open]:border max-lg:group-[.open]:border-border max-lg:group-[.open]:bg-card max-lg:group-[.open]:p-2">
       <a class="nav-link" href="/">Beranda</a>
-      <a class="nav-link" href="/aset/">Aset</a>
-      <a class="nav-link" href="/objek/">Objek komersial</a>
-      <a class="nav-link" href="/sewa/">Nilai sewa</a>
-      <a class="nav-link" href="/ksp/">Proyek KSP</a>
-      <a class="nav-link" href="/kpbu/">KPBU</a>
-      <a class="nav-link" href="/dokumen/">Dokumen</a>
+      <!-- Dropdown "Aset": klik untuk buka/tutup (lihat src/features/nav.js). Di mobile terbuka di dalam daftar. -->
+      <div class="nav-drop" data-drop>
+        <button type="button" class="nav-link cursor-pointer gap-1.5 max-lg:justify-between" aria-expanded="false" aria-controls="asetMenu" data-drop-toggle>
+          Aset
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div id="asetMenu" class="nav-drop-panel">
+          <a class="nav-drop-link" href="/aset/">Aset BMN</a>
+          <a class="nav-drop-link" href="/objek/">Objek Komersial</a>
+          <a class="nav-drop-link" href="/sewa/">Nilai Sewa</a>
+          <a class="nav-drop-link" href="/ksp/">Proyek</a>
+          <a class="nav-drop-link" href="/kpbu/">KPBU</a>
+        </div>
+      </div>
+      <a class="nav-link" href="/peta/">Peta</a>
+      <a class="nav-link" href="/dokumen/">Knowledge Base</a>
     </nav>
 
     <div class="flex items-center gap-1">

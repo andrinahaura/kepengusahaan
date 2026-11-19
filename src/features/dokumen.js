@@ -1,7 +1,8 @@
 import { $ } from "../lib/dom.js";
-import { esc } from "../lib/format.js";
+import { esc, fmtDate } from "../lib/format.js";
 import { chip, renderCards } from "../ui/cards.js";
 import { icon } from "../ui/icons.js";
+import { media } from "../ui/media.js";
 
 /** Semua dokumen sebagai kartu yang bisa diunduh. */
 export function initDokumen(d) {
@@ -12,13 +13,11 @@ export function initDokumen(d) {
     dokumen,
     (x) => `
     <article class="item-card">
-      <div class="flex items-start justify-between gap-3">
-        <span class="icon-badge">${icon("file")}</span>
-        ${chip(x.tipe, "primary")}
-      </div>
+      ${media({ foto: x.foto, alt: x.judul, fallbackIcon: "file" }, chip(x.tipe, "primary"))}
       <p class="item-kicker">${esc(x.kategori)}</p>
       <h2 class="item-title break-words">${esc(x.judul)}</h2>
-      <div class="item-foot"><a class="btn btn-primary" href="${esc(x.url)}" download>Unduh ${esc(x.tipe)}</a></div>
+      ${x.diunggah ? `<p class="mt-1 text-sm text-muted-foreground">Diunggah ${fmtDate(x.diunggah)}</p>` : ""}
+      <div class="item-foot"><a class="item-action" href="${esc(x.url)}" download>Unduh ${esc(x.tipe)} <span class="action-icon"><span class="inline-flex rotate-90">${icon("arrow", 15)}</span></span></a></div>
     </article>`,
     "Belum ada dokumen.",
   );

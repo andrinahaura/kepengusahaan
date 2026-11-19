@@ -40,6 +40,11 @@ export function initKlinik() {
 
   form.addEventListener("input", (e) => e.target.closest(".field")?.classList.remove("invalid"));
 
+  // Penghitung karakter pertanyaan (maks. 5000).
+  const count = () => ($("#pesanCount").textContent = `${$("#fPesan").value.length}/5000`);
+  $("#fPesan").addEventListener("input", count);
+  form.addEventListener("reset", () => setTimeout(count));
+
   $("#newTicket").addEventListener("click", () => {
     form.reset();
     $("#formSuccess").classList.add("hidden");

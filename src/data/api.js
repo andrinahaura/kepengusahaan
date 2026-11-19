@@ -2,8 +2,9 @@ import { DATA } from "./public-data.js";
 
 export const KPBU_TAHAP = ["Perencanaan", "Penyiapan", "Transaksi", "Konstruksi", "Operasi", "Serah Terima"];
 
-/* Rekaman berstatus Draf tidak tampil ke publik. */
-const isPublic = (r) => r.statusData !== "Draf";
+/* Hanya rekaman terverifikasi yang tampil ke publik (sama dengan portal e-kepengusahaan).
+   Rekaman tanpa kolom statusData (objek, sewa) mengikuti asetnya. */
+const isPublic = (r) => r.statusData == null || r.statusData === "Terverifikasi";
 
 /** "TERMINAL AMPLAS" → "terminal-amplas" (dipakai sebagai id di URL detail). */
 const slug = (s) =>
@@ -25,24 +26,37 @@ export const detailUrl = (type, id) => `/${type}/detail/?id=${encodeURIComponent
 export async function loadPublicData() {
   const raw = DATA;
 
-  const profil = raw.profil.map((r) => ({ ...r, id: slug(r.nama) }));
+  const profil = raw.profil.filter(isPublic).map((r) => ({ ...r, id: slug(r.nama), coord: r.lat != null ? { lat: r.lat, lng: r.lng } : null }));
   const asetByNama = new Map(profil.map((a) => [a.nama, a]));
   const asetByBptd = (bptd) => {
     const list = profil.filter((a) => a.bptd === bptd);
     return list.length === 1 ? list[0] : null; // hanya bila satu-satunya aset di BPTD itu
   };
 
-  // Objek komersial belum punya kolom aset di data; sementara dihubungkan lewat BPTD.
-  const objek = raw.objekKomersial.map((r) => ({ ...r, id: slug(`${r.kodeBarang}-${r.nup}`), asetId: asetByBptd(r.bptd)?.id ?? null }));
+  // Objek dihubungkan lewat nama aset; bila kosong, lewat BPTD (hanya bila satu-satunya aset di BPTD itu).
+  const objek = raw.objekKomersial
+    .map((r) => {
+      const aset = asetByNama.get(r.aset) ?? asetByBptd(r.bptd);
+      return { ...r, id: slug(`${r.kodeBarang}-${r.nup}`), asetId: aset?.id ?? null, provinsi: aset?.provinsi ?? null };
+    })
+    .filter((r) => r.asetId);
   const objekByNama = new Map(objek.map((o) => [o.nama, o]));
-  const sewa = raw.nilaiSewa.map((r) => ({
-    ...r,
-    id: slug(`${r.objek}-${r.jangkaWaktu}`),
-    objekId: objekByNama.get(r.objek)?.id ?? null,
-    asetId: objekByNama.get(r.objek)?.asetId ?? null,
-  }));
-  const ksp = raw.proyekKsp.filter(isPublic).map((r) => ({ ...r, id: slug(r.nama), asetId: asetByNama.get(r.aset)?.id ?? null }));
-  const kpbu = raw.kpbu.filter(isPublic).map((r) => ({ ...r, asetId: asetByNama.get(r.aset)?.id ?? null }));
+  const sewa = raw.nilaiSewa
+    .map((r) => {
+      const o = objekByNama.get(r.objek);
+      return { ...r, id: slug(`${r.objek}-${r.jangkaWaktu}`), objekId: o?.id ?? null, asetId: o?.asetId ?? null, luas: o?.luas ?? null };
+    })
+    .filter((r) => r.objekId);
+  const withAset = (r) => {
+    const a = asetByNama.get(r.aset);
+    return { asetId: a?.id ?? null, bptd: a?.bptd ?? null, provinsi: a?.provinsi ?? null };
+  };
+  const ksp = raw.proyekKsp.filter(isPublic).map((r) => ({ ...r, id: slug(r.nama), ...withAset(r) })).filter((r) => r.asetId);
+  const kpbu = raw.kpbu.filter(isPublic).map((r) => ({ ...r, ...withAset(r) })).filter((r) => r.asetId);
+
+  // Lokasi item lain = lokasi asetnya (untuk gambar pratinjau peta di kartu).
+  const asetById = new Map(profil.map((a) => [a.id, a]));
+  for (const r of [...objek, ...sewa, ...ksp, ...kpbu]) r.coord = asetById.get(r.asetId)?.coord ?? null;
 
   /** Semua item yang terhubung ke satu aset. */
   const related = (asetId) => ({

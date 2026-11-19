@@ -8,9 +8,9 @@ const partialsDir = resolve(root, "partials");
 
 /** Halaman (multi-page). Tambah halaman baru: buat <slug>/index.html lalu daftarkan di sini. */
 const PAGES = [
-  "aset", "objek", "sewa", "ksp", "kpbu", "dokumen", "klinik",
+  "aset", "objek", "sewa", "ksp", "kpbu", "peta", "dokumen", "klinik",
   // Halaman detail: /<menu>/detail/?id=…
-  "aset/detail", "objek/detail", "sewa/detail", "ksp/detail", "kpbu/detail",
+  "aset/detail", "objek/detail", "sewa/detail", "ksp/detail", "kpbu/detail", "kios/detail",
 ];
 
 /**

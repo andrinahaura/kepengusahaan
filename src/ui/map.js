@@ -35,10 +35,18 @@ export async function createMap(container, options = {}) {
   }
 }
 
-/** Elemen penanda bulat (gaya .map-marker). */
-export function markerEl(label) {
+/**
+ * Pin terminal (gaya .map-pin): kepala bulat navy berikon gedung dengan ekor ke titik lokasi.
+ * Pasang dengan Marker({ element, anchor: "bottom" }) supaya ujung ekor tepat di koordinat.
+ * `badge` (angka) tampil sebagai lencana kecil di pojok kepala pin.
+ */
+export function pinEl(label, badge) {
   const el = document.createElement("button");
-  el.className = "map-marker";
+  el.type = "button";
+  el.className = "map-pin";
   el.setAttribute("aria-label", label);
+  el.innerHTML = `<span class="map-pin-head"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v8h4M18 9h2a2 2 0 0 1 2 2v11h-4M10 6h4M10 10h4M10 14h4M10 18h4"/></svg></span>${
+    badge ? `<span class="map-pin-badge">${badge}</span>` : ""
+  }`;
   return el;
 }

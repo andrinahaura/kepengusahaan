@@ -12,6 +12,9 @@
 
 <main>
 
+<!-- Layar pertama: hero + KPI + peta setinggi layar perangkat + 160px; peta mengisi sisa ruang. -->
+<div class="flex h-[calc(100svh+160px)] min-h-[800px] flex-col">
+
 <!-- Hero: foto terminal (hitam-putih) + lapisan navy (primary dashboard).
      Foto: "Harapan Jaya buses", Juliyus Iyus, Wikimedia Commons, domain publik. Ganti file di public/hero.jpg bila perlu. -->
 <section class="relative isolate overflow-hidden bg-primary text-primary-foreground">
@@ -38,20 +41,68 @@
 
 <!-- Peta: selebar layar, ditarik ke atas sampai tepi bawah hero sehingga KPI menumpang di antara keduanya.
      Tepi atas peta memudar dari navy (menyambung hero), tepi bawah memudar ke warna latar. -->
-<section id="peta" class="relative -mt-16">
-  <div id="map" class="h-[100svh] min-h-[560px] w-full bg-muted" role="region" aria-label="Peta lokasi aset"></div>
+<section id="peta" class="relative -mt-16 min-h-[280px] flex-1">
+  <div id="map" class="absolute inset-0 bg-muted" role="region" aria-label="Peta lokasi aset"></div>
   <!-- z-1: di atas kanvas & marker, di bawah kontrol MapLibre (z-2). -->
-  <div class="pointer-events-none absolute inset-x-0 top-0 z-1 h-64 bg-linear-to-b from-primary via-primary/45 to-transparent" aria-hidden="true"></div>
-  <div class="pointer-events-none absolute inset-x-0 bottom-0 z-1 hidden h-24 bg-linear-to-t from-background to-transparent lg:block" aria-hidden="true"></div>
-  <!-- Daftar lokasi: di layar lebar menempel di atas peta (di bawah KPI), sejajar tepi kiri konten. -->
-  <div class="relative z-2 lg:pointer-events-none lg:absolute lg:inset-x-0 lg:top-28">
-    <div class="wrap">
-      <div id="locPanel" class="mt-4 overflow-hidden rounded-card border border-border bg-card lg:pointer-events-auto lg:mt-0 lg:w-[300px]">
-        <p class="flex items-center justify-between gap-3 border-b border-border px-5 py-3 text-xs font-semibold text-muted-foreground">Lokasi aset <span id="asetMeta" class="text-muted-foreground"></span></p>
-        <ul id="locList" class="max-h-[320px] divide-y divide-border overflow-y-auto lg:max-h-[calc(100svh-16rem)]"></ul>
+  <div class="pointer-events-none absolute inset-x-0 top-0 z-1 h-32 bg-linear-to-b from-primary via-primary/45 to-transparent" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute inset-x-0 bottom-0 z-1 h-16 bg-linear-to-t from-card to-transparent" aria-hidden="true"></div>
+</section>
+
+</div>
+
+<!-- Di bawah peta: section terpisah dengan latar selang-seling (putih / abu muda), tanpa garis pemisah.
+     Isi tiap section diisi dari data publik oleh src/features/sekilas.js. -->
+<section class="sec sec-white" aria-labelledby="panduanTitle">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <h2 id="panduanTitle" class="sec-title">Cara menemukan kios</h2>
+        <p class="sec-sub">Tiga langkah dari peta sampai pengajuan minat sewa.</p>
       </div>
     </div>
+    <div id="secPanduan"></div>
   </div>
+</section>
+
+<section class="sec sec-soft" aria-labelledby="sewaTitle">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <h2 id="sewaTitle" class="sec-title">Peluang usaha di terminal</h2>
+        <p class="sec-sub">Kios, tarif sewa, dan aset terminal Ditjen Perhubungan Darat, dirangkum dari data publik.</p>
+      </div>
+    </div>
+    <div id="secSewa" class="grid gap-5 md:grid-cols-2 lg:grid-cols-3"></div>
+  </div>
+</section>
+
+<section class="sec sec-white" aria-labelledby="proyekTitle">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <h2 id="proyekTitle" class="sec-title">Proyek kerja sama</h2>
+        <p class="sec-sub">Kerja sama pemanfaatan (KSP) dan KPBU di aset terminal.</p>
+      </div>
+    </div>
+    <div id="secProyek" class="grid gap-5 md:grid-cols-2"></div>
+  </div>
+</section>
+
+<section class="sec sec-soft" aria-labelledby="kbTitle">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <h2 id="kbTitle" class="sec-title">Knowledge Base</h2>
+        <p class="sec-sub">FAQ, artikel, regulasi, SOP, dan template seputar pemanfaatan aset terminal.</p>
+      </div>
+      <a id="kbAll" class="item-action" href="/dokumen/">Lihat semua dokumen</a>
+    </div>
+    <div id="secKb"></div>
+  </div>
+</section>
+
+<section class="sec sec-white" aria-labelledby="klinikTitle">
+  <div id="secKlinik" class="wrap"></div>
 </section>
 
 </main>
